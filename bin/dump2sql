@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. ${DIR}/.config
+
+mysqldump \
+    --compatible=ansi \
+    --skip-comments \
+    --skip-opt \
+    --quote-names \
+    --default-character-set=utf8 \
+    --single-transaction \
+    --quick \
+    --skip-extended-insert \
+    --replace \
+    --host=${HOST} \
+    --user=${USER} \
+    --password=${PASS} \
+    ${DB}

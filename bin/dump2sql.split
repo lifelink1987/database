@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+set -e
+
+DEST=${1}
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. ${DIR}/.config
+
+function dump_table_data_format() {
+      sed -e "s/INSERT INTO/\r\nINSERT INTO/g" \
+    | sed -e "s/REPLACE INTO/\r\nREPLACE INTO/g" \
+    | sed -e "s/(\`/(\r\n\`/g" \
+    | sed -e "s/\`, \`/\`,\r\n\`/g" \
+    | sed -e "s/\`)/\`\r\n)/g" \
+    | sed -e "s/VALUES (/VALUES (\r\n/g" \
+    | sed -e "s/,NULL/,\r\nNULL/g" \
+    | sed -e "s/,'/,\r\n'/g" \
+    | sed -e "s/')/'\r\n)/g"
+}
+
+function dump_table() {
+    local TABLE="${1}"
+    local PRE_ARGS="${2}"
+    local SU_ARGS="${3}"
+
+    mysqldump \
+        --compatible=ansi \
+        --skip-comments \
+        --skip-opt \
+        --quote-names \
+        --default-character-set=utf8 \
+        --single-transaction \
+        --host=${HOST} \
+        --user=${USER} \
+        --password=${PASS} \
+        ${PRE_ARGS} \
+        ${DB} \
+        ${TABLE} \
+        ${SU_ARGS} \
+        2>/dev/null
+}
+
+function dump_table_schema() {
+    local FILE="${1}"
+    local TABLE="${2}"
+    local PRE_ARGS="${3}"
+    local SU_ARGS="${4}"
+
+    PRE_ARGS=" \
+        --no-data \
+        ${PRE_ARGS} \
+        "
+    echo -ne "Dumping ${FILE}...\033[0K\r"
+    dump_table "${TABLE}" "${PRE_ARGS}" "${SU_ARGS}" \
+        >${FILE}
+}
+
+function dump_table_data() {
+    local FILE="${1}"
+    local TABLE="${2}"
+    local PRE_ARGS="${3}"
+    local SU_ARGS="${4}"
+
+    echo -ne "Dumping ${FILE}...\033[0K\r"
+    PRE_ARGS=" \
+        --no-create-info \
+        --quick \
+        --skip-extended-insert \
+        --replace \
+        ${PRE_ARGS} \
+        "
+    dump_table "${TABLE}" "${PRE_ARGS}" "${SU_ARGS}" \
+        >${FILE}
+        # | dump_table_data_format \
+}
+
+rm -f ${DEST}/schema/${DB}.*.mysql.sql
+rm -f ${DEST}/data/${DB}.*.mysql.sql
+rm -f ${DEST}/view/${DB}.*.mysql.sql
+rm -f ${DEST}/${DB}.{mysql.sql,sqlite.sql,sqlite}
+#rm -f ${DEST}/${DB}*.sql
+
+echo -e "Dumping TABLES to SQL...\033[0K"
+for TABLE in ${TABLES[@]}; do
+    FILE=${DB}.${TABLE}.mysql.sql
+    FILE_SCHEMA=${DEST}/schema/${FILE}
+    FILE_DATA=${DEST}/data/${FILE}
+
+    dump_table_schema ${FILE_SCHEMA} ${TABLE}
+    dump_table_data ${FILE_DATA} ${TABLE}
+done
+cat ${DEST}/schema/${DB}.*.mysql.sql ${DEST}/data/${DB}.*.mysql.sql >${DEST}/${DB}.mysql.sql
+
+echo -e "Dumping VIEWS to SQL...\033[0K"
+for VIEW in ${VIEWS[@]}; do
+    FILE=${DB}.${VIEW}.mysql.sql
+    FILE_SCHEMA=${DEST}/view/${FILE}
+    dump_table_schema ${FILE_SCHEMA} ${VIEW}
+done
+
+echo -e "Dumping to SQLITE...\033[0K"
+command -v sqlite3 >/dev/null 2>&1 && {
+    rm -f ${DEST}/${DB}.sqlite.sql
+    ${DIR}/mysql2sqlite <${DEST}/${DB}.mysql.sql >${DEST}/${DB}.sqlite.sql
+    rm -f ${DEST}/${DB}.sqlite
+    sqlite3 ${DEST}/${DB}.sqlite <${DEST}/${DB}.sqlite.sql >/dev/null
+}
