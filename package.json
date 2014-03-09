@@ -1,0 +1,35 @@
+{
+  "private": true,
+  "name": "lifelink-database",
+  "description": "",
+  "keywords": [],
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lifelink/database.git"
+  },
+  "licenses": [],
+  "scripts": {},
+  "dependencies": {
+    "sqlite3": "~2.2.0",
+    "coffee-script": "~1.6.3",
+    "fs-extra": "~0.8.1",
+    "mysql": "~2.1.0",
+    "lodash": "~2.4.1",
+    "js-yaml": "~3.0.2",
+    "moment": "~2.5.1",
+    "marked": "~0.3.1"
+  },
+  "optionalDependencies": {},
+  "devDependencies": {},
+  "optionalDevDependencies": {},
+  "engines": {
+    "node": ">=0.10.0",
+    "npm": ">=1.3.0"
+  },
+  "engineStrict": true,
+  "publishConfig": {
+    "optionalDependencies": {},
+    "devDependencies": {}
+  }
+}

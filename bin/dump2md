@@ -1,0 +1,98 @@
+#!/usr/bin/env coffee
+
+host = 'sql.life-link.org'
+user = 'lifelink_basic'
+password = process.argv[2]
+database = 'lifelink'
+root = ['master', 'friendship-schools']
+
+{
+  fs
+  path
+  _
+  yml
+  moment
+  marked
+  connect
+  query
+  toDate
+  addSection
+  Renderer
+} = require "#{__dirname}/dump2md.coffee"
+
+conn = connect {
+  host
+  user
+  password
+  database
+}
+
+renderer = new Renderer()
+
+root = path.join.apply path, root
+fs.removeSync root
+
+query "SELECT * FROM member_reports_overview LIMIT 0,5", (row) ->
+  row.actions = _.map row.actions.toString().split(','), (action) ->
+    parseInt action, 10
+    #action[0] + ':' + action.substr 1
+
+  dir = path.join.apply path, [
+    root
+    row.iso3
+    _.compact([row.county, row.city]).join(' - ')
+    row.member_schools_number.toString()
+    #row.member_reports_id.toString()
+  ]
+  fs.mkdirpSync dir
+
+  # Process
+  date = toDate row.date
+  contact = undefined
+  _school_name = undefined
+
+  if row.date_days > 1
+    date2 = toDate moment(date).add 'days', row.date_days
+    date = "#{date} - #{date2}"
+  if row.contact?.length
+    contact = row.contact
+    if row.email_contact?.length
+      contact = "#{contact} <#{row.email_contact}>"
+
+  # Dump yml
+  frontmatter = _.compactObject {
+    school: row.member_schools_number
+    date
+    actions: _.toArray row.actions
+    students: row.students
+    students_age: row.students_age
+    teachers: row.teachers
+    parents: row.parents
+    contact
+    _id: row.member_reports_id
+    _school:
+      name: row.school.trim()
+      city: row.city
+      county: row.county
+      country: row.country
+    _datetime_registration: toDate row.datetime_registration
+    _datetime_approval: toDate row.datetime_approval
+  }
+
+  # Dump md
+  md = [
+    type: 'hr'
+  ,
+    type: 'paragraph'
+    text: yml.safeDump frontmatter
+  ,
+    type: 'hr'
+  ]
+
+  md = addSection md, 'Report', row.description
+  #md = addSection md, 'Media', row.media  if row.media?.length
+  md = addSection md, 'Feedback', row.feedback  if row.feedback?.length
+
+  filename = path.join dir, "#{row.member_reports_id}.md"
+  process.stdout.write "Writing report ##{row.member_reports_id}...\r"
+  fs.writeFileSync filename, renderer.render md
