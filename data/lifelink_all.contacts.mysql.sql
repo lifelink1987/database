@@ -1,0 +1,45 @@
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO,ANSI' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+REPLACE INTO "contacts" VALUES (1,'0',NULL,'',0,NULL,'actions','actions@life-link.org');
+REPLACE INTO "contacts" VALUES (2,'Andrei Neculau','Developer/IT Consultant','Consultants',100,642,'andrei',NULL);
+REPLACE INTO "contacts" VALUES (3,'Peder Palmstierna','Secretary of Board\r\nScience Teacher','Board',100,752,'peder',NULL);
+REPLACE INTO "contacts" VALUES (4,'Maria Barck-Holst','B.A.','Board',100,752,'maria',NULL);
+REPLACE INTO "contacts" VALUES (5,'Hans Levander','Chairman\r\nMedical Doctor','Board',1,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (6,'Marie Säve','Secretary, Life-Link Office','Secretary',100,752,'marie','marie.save@life-link.org');
+REPLACE INTO "contacts" VALUES (7,'Josefina Löfgren','International Relations','International Advisors',100,826,'josefina',NULL);
+REPLACE INTO "contacts" VALUES (8,'Per Walegren','Treasurer\r\nAccounting Manager','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (9,'Rita Medvedeva','Medical Student','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (10,'Christina Peters','Teacher in German language and History','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (11,'Göran Säve','Executive Director Earth Care Campaign','Consultants',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (12,'Eva Sandström Hultman','Economics Teacher','Consultants',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (13,'Carl Lindberg','Advisor for \"Education for Sustainable Development\" - Swedish Commission for UNESCO','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (14,'Peter Wallensteen','Prof. Dept. of Peace and Conflict Research, Uppsala Univesity','International Advisors',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (15,'Per Modeér','Authorized Auditor, PM Revision','Consultants',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (16,'Christina McMahon','B.A. Dip. Ed., Director Conflict Resolution Schools Development','International Advisors',100,36,NULL,NULL);
+REPLACE INTO "contacts" VALUES (17,'Marcela Masó','Active Life-Link Teacher','International Advisors',100,32,NULL,NULL);
+REPLACE INTO "contacts" VALUES (18,'Molook Khadivi','Active Life-Link Teacher','International Advisors',100,364,NULL,NULL);
+REPLACE INTO "contacts" VALUES (19,'Nazanin Mehrin','Youth Chair Person\r\nUniversity Student, Stockholm','Board',2,364,NULL,NULL);
+REPLACE INTO "contacts" VALUES (20,' Håkan Gustafsson','Teacher at Eriksbergsskolan, Uppsala','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (21,'Per-Rickard Rönnberg','Project Planning Team Uppsala Kommun','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (22,'Erika Ströberg','Student at Erkisbergsskolan, Uppsala','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (23,'Eskil Höglund','Student at Eriksbergsskolan, Uppsala','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (24,'Esbjörn Forss','Master of Social Science','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (25,'Erik Edvardsson','Student','Consultants',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (26,'Eva Nilsson-Lindin','Teacher at SSHL','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (27,'Gladys Hernandez Parra,','Active Life-Link Teacher','International Advisors',100,152,NULL,NULL);
+REPLACE INTO "contacts" VALUES (28,'Peter Nyman','Teacher at Eriksbergsskolan','Board',100,752,NULL,NULL);
+REPLACE INTO "contacts" VALUES (29,'Sukhjinder Singh','Independent Schools’ Federation of India','International Advisors',100,356,NULL,NULL);
+REPLACE INTO "contacts" VALUES (30,'Kalaimani Supramaniam','DepChairman Malaysian Nature Society','International Advisors',100,458,NULL,NULL);
+REPLACE INTO "contacts" VALUES (31,'Omar Tayeh','Private Schools Council','International Advisors',100,400,NULL,NULL);
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
