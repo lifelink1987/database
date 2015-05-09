@@ -1,0 +1,1084 @@
+-- MySQL dump 10.13  Distrib 5.6.16, for osx10.9 (x86_64)
+--
+-- Host: sql.life-link.org    Database: lifelink
+-- ------------------------------------------------------
+-- Server version	5.1.53-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `actions`
+--
+
+DROP TABLE IF EXISTS `actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `actions` (
+  `actions_number` smallint(5) unsigned NOT NULL,
+  `action` varchar(255) DEFAULT NULL,
+  `description_theory` text,
+  `description_action` text,
+  `description_stepbystep` text,
+  `extra_title` varchar(255) DEFAULT NULL,
+  `extra_info` text,
+  `is_old` enum('yes','no') NOT NULL DEFAULT 'no',
+  PRIMARY KEY (`actions_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `actions_has_tags`
+--
+
+DROP TABLE IF EXISTS `actions_has_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `actions_has_tags` (
+  `actions_has_tags_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `actions_number_fk` smallint(5) unsigned NOT NULL,
+  `tags_id_fk` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`actions_number_fk`,`tags_id_fk`),
+  UNIQUE KEY `actions_has_tags_id_UNIQUE` (`actions_has_tags_id`),
+  KEY `actions_has_tags_actions_number_fk1` (`actions_number_fk`),
+  KEY `actions_has_tags_tags_id_fk1` (`tags_id_fk`),
+  CONSTRAINT `actions_has_tags_actions_number_fk1` FOREIGN KEY (`actions_number_fk`) REFERENCES `actions` (`actions_number`) ON UPDATE CASCADE,
+  CONSTRAINT `actions_has_tags_tags_id_fk1` FOREIGN KEY (`tags_id_fk`) REFERENCES `tags` (`tags_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `actions_overview`
+--
+
+DROP TABLE IF EXISTS `actions_overview`;
+/*!50001 DROP VIEW IF EXISTS `actions_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `actions_overview` (
+  `actions_number` tinyint NOT NULL,
+  `actions_number_nice` tinyint NOT NULL,
+  `action` tinyint NOT NULL,
+  `description_theory` tinyint NOT NULL,
+  `description_action` tinyint NOT NULL,
+  `description_stepbystep` tinyint NOT NULL,
+  `extra_title` tinyint NOT NULL,
+  `extra_info` tinyint NOT NULL,
+  `is_old` tinyint NOT NULL,
+  `tags` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `contacts`
+--
+
+DROP TABLE IF EXISTS `contacts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contacts` (
+  `contacts_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `contact` varchar(255) NOT NULL,
+  `position` varchar(255) DEFAULT NULL,
+  `department` enum('Board','Consultants','Secretary','International Advisors') NOT NULL DEFAULT 'Board',
+  `department_order` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `countries_iso_fk` smallint(6) DEFAULT NULL,
+  `nickname` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`contacts_id`),
+  KEY `countries_iso_fk` (`countries_iso_fk`),
+  CONSTRAINT `contacts_countries_iso_fk` FOREIGN KEY (`countries_iso_fk`) REFERENCES `countries` (`countries_iso`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `contacts_overview`
+--
+
+DROP TABLE IF EXISTS `contacts_overview`;
+/*!50001 DROP VIEW IF EXISTS `contacts_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `contacts_overview` (
+  `contacts_id` tinyint NOT NULL,
+  `contact` tinyint NOT NULL,
+  `position` tinyint NOT NULL,
+  `department` tinyint NOT NULL,
+  `department_order` tinyint NOT NULL,
+  `countries_iso_fk` tinyint NOT NULL,
+  `nickname` tinyint NOT NULL,
+  `email` tinyint NOT NULL,
+  `country` tinyint NOT NULL,
+  `country_short` tinyint NOT NULL,
+  `country_se` tinyint NOT NULL,
+  `countries_iso` tinyint NOT NULL,
+  `iso3` tinyint NOT NULL,
+  `iso2` tinyint NOT NULL,
+  `phone` tinyint NOT NULL,
+  `adjectivals` tinyint NOT NULL,
+  `demonyms` tinyint NOT NULL,
+  `demonyms_colloquial` tinyint NOT NULL,
+  `coord_lat` tinyint NOT NULL,
+  `coord_lng` tinyint NOT NULL,
+  `coord_accuracy` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `countries`
+--
+
+DROP TABLE IF EXISTS `countries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `countries` (
+  `countries_iso` smallint(6) NOT NULL COMMENT 'Code (ISO 3166-1 numeric)',
+  `country` varchar(255) NOT NULL COMMENT 'Name',
+  `country_se` varchar(255) CHARACTER SET ucs2 DEFAULT NULL COMMENT 'Name (Swedish)',
+  `iso3` varchar(3) DEFAULT NULL COMMENT 'Code (ISO 3166-1 alpha-3)',
+  `iso2` varchar(2) DEFAULT NULL COMMENT 'Code (ISO 3166-1 alpha-2)',
+  `phone` smallint(6) DEFAULT NULL COMMENT 'Phone (ITU-T E.164)',
+  `adjectivals` varchar(255) DEFAULT NULL,
+  `demonyms` varchar(255) DEFAULT NULL,
+  `demonyms_colloquial` varchar(255) DEFAULT NULL,
+  `coord_lat` float NOT NULL DEFAULT '0',
+  `coord_lng` float NOT NULL DEFAULT '0',
+  PRIMARY KEY (`countries_iso`),
+  UNIQUE KEY `name_se` (`country_se`),
+  KEY `name` (`country`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `countries_overview`
+--
+
+DROP TABLE IF EXISTS `countries_overview`;
+/*!50001 DROP VIEW IF EXISTS `countries_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `countries_overview` (
+  `country` tinyint NOT NULL,
+  `country_short` tinyint NOT NULL,
+  `country_se` tinyint NOT NULL,
+  `countries_iso` tinyint NOT NULL,
+  `iso3` tinyint NOT NULL,
+  `iso2` tinyint NOT NULL,
+  `phone` tinyint NOT NULL,
+  `adjectivals` tinyint NOT NULL,
+  `demonyms` tinyint NOT NULL,
+  `demonyms_colloquial` tinyint NOT NULL,
+  `coord_lat` tinyint NOT NULL,
+  `coord_lng` tinyint NOT NULL,
+  `coord_accuracy` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `days`
+--
+
+DROP TABLE IF EXISTS `days`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `days` (
+  `days_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `type` enum('un','western') NOT NULL DEFAULT 'western',
+  `month_day` smallint(5) unsigned NOT NULL,
+  `month` smallint(5) unsigned NOT NULL,
+  `day` varchar(255) NOT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`days_id`),
+  KEY `day` (`month`,`month_day`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `days_has_actions`
+--
+
+DROP TABLE IF EXISTS `days_has_actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `days_has_actions` (
+  `days_has_actions_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `days_id_fk` smallint(5) unsigned NOT NULL,
+  `actions_number_fk` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`days_id_fk`,`actions_number_fk`),
+  UNIQUE KEY `days_has_actions_id_UNIQUE` (`days_has_actions_id`),
+  KEY `days_has_actions_days_id_fk` (`days_id_fk`),
+  KEY `days_has_actions_actions_number_fk` (`actions_number_fk`),
+  CONSTRAINT `days_has_actions_actions_number_fk` FOREIGN KEY (`actions_number_fk`) REFERENCES `actions` (`actions_number`) ON UPDATE CASCADE,
+  CONSTRAINT `days_has_actions_days_id_fk` FOREIGN KEY (`days_id_fk`) REFERENCES `days` (`days_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `days_overview`
+--
+
+DROP TABLE IF EXISTS `days_overview`;
+/*!50001 DROP VIEW IF EXISTS `days_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `days_overview` (
+  `days_id` tinyint NOT NULL,
+  `type` tinyint NOT NULL,
+  `month_day` tinyint NOT NULL,
+  `month` tinyint NOT NULL,
+  `day` tinyint NOT NULL,
+  `url` tinyint NOT NULL,
+  `actions` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `delicious`
+--
+
+DROP TABLE IF EXISTS `delicious`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `delicious` (
+  `delicious_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`delicious_id`),
+  UNIQUE KEY `url_UNIQUE` (`url`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `delicious_has_tags`
+--
+
+DROP TABLE IF EXISTS `delicious_has_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `delicious_has_tags` (
+  `delicious_has_tags_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `delicious_id_fk` smallint(5) unsigned NOT NULL,
+  `tags_id_fk` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`delicious_id_fk`,`tags_id_fk`),
+  UNIQUE KEY `delicious_has_tags_id_UNIQUE` (`delicious_has_tags_id`),
+  KEY `delicious_has_tags_delicious_id_fk1` (`delicious_id_fk`),
+  KEY `delicious_has_tags_tags_id_fk1` (`tags_id_fk`),
+  CONSTRAINT `delicious_has_tags_delicious_id_fk1` FOREIGN KEY (`delicious_id_fk`) REFERENCES `delicious` (`delicious_id`) ON UPDATE CASCADE,
+  CONSTRAINT `delicious_has_tags_tags_id_fk1` FOREIGN KEY (`tags_id_fk`) REFERENCES `tags` (`tags_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `delicious_overview`
+--
+
+DROP TABLE IF EXISTS `delicious_overview`;
+/*!50001 DROP VIEW IF EXISTS `delicious_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `delicious_overview` (
+  `delicious_id` tinyint NOT NULL,
+  `url` tinyint NOT NULL,
+  `title` tinyint NOT NULL,
+  `description` tinyint NOT NULL,
+  `datetime` tinyint NOT NULL,
+  `tags` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `events`
+--
+
+DROP TABLE IF EXISTS `events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `events` (
+  `events_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `type` enum('conference_major','conference','seminar','workshop','guest','campaign','misc') NOT NULL DEFAULT 'misc',
+  `date_start` date NOT NULL,
+  `date_end` date NOT NULL,
+  `logo` longblob,
+  `event` varchar(255) DEFAULT NULL,
+  `event_cont` varchar(255) DEFAULT NULL,
+  `description` text,
+  `slug_gallery` varchar(255) DEFAULT NULL,
+  `slug_survey` varchar(255) DEFAULT NULL,
+  `countries_iso_fk` smallint(6) DEFAULT NULL,
+  `is_sticky` enum('yes','no') NOT NULL DEFAULT 'no',
+  PRIMARY KEY (`events_id`),
+  KEY `countries_iso_fk` (`countries_iso_fk`),
+  CONSTRAINT `events_countries_iso_fk` FOREIGN KEY (`countries_iso_fk`) REFERENCES `countries` (`countries_iso`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `events_has_actions`
+--
+
+DROP TABLE IF EXISTS `events_has_actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `events_has_actions` (
+  `events_has_actions_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `events_id_fk` smallint(5) unsigned NOT NULL,
+  `actions_number_fk` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`events_id_fk`,`actions_number_fk`),
+  UNIQUE KEY `events_has_actions_id_UNIQUE` (`events_has_actions_id`),
+  KEY `events_has_actions_events_id_fk` (`events_id_fk`),
+  KEY `events_has_actions_actions_number_fk` (`actions_number_fk`),
+  CONSTRAINT `events_has_actions_actions_number_fk` FOREIGN KEY (`actions_number_fk`) REFERENCES `actions` (`actions_number`) ON UPDATE CASCADE,
+  CONSTRAINT `events_has_actions_events_id_fk` FOREIGN KEY (`events_id_fk`) REFERENCES `events` (`events_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `events_has_tags`
+--
+
+DROP TABLE IF EXISTS `events_has_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `events_has_tags` (
+  `events_has_tags_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `events_id_fk` smallint(5) unsigned NOT NULL,
+  `tags_id_fk` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`events_id_fk`,`tags_id_fk`),
+  UNIQUE KEY `events_has_tags_id_UNIQUE` (`events_has_tags_id`),
+  UNIQUE KEY `one_tag_per_event` (`events_id_fk`,`tags_id_fk`),
+  KEY `events_has_tags_events_id_fk1` (`events_id_fk`),
+  KEY `events_has_tags_tags_id_fk1` (`tags_id_fk`),
+  CONSTRAINT `events_has_tags_events_id_fk1` FOREIGN KEY (`events_id_fk`) REFERENCES `events` (`events_id`) ON UPDATE CASCADE,
+  CONSTRAINT `events_has_tags_tags_id_fk1` FOREIGN KEY (`tags_id_fk`) REFERENCES `tags` (`tags_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `events_overview`
+--
+
+DROP TABLE IF EXISTS `events_overview`;
+/*!50001 DROP VIEW IF EXISTS `events_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `events_overview` (
+  `events_id` tinyint NOT NULL,
+  `type` tinyint NOT NULL,
+  `date_start` tinyint NOT NULL,
+  `year_start` tinyint NOT NULL,
+  `date_end` tinyint NOT NULL,
+  `year_end` tinyint NOT NULL,
+  `logo` tinyint NOT NULL,
+  `event` tinyint NOT NULL,
+  `event_cont` tinyint NOT NULL,
+  `description` tinyint NOT NULL,
+  `slug_gallery` tinyint NOT NULL,
+  `slug_survey` tinyint NOT NULL,
+  `countries_iso_fk` tinyint NOT NULL,
+  `is_sticky` tinyint NOT NULL,
+  `country` tinyint NOT NULL,
+  `country_short` tinyint NOT NULL,
+  `country_se` tinyint NOT NULL,
+  `countries_iso` tinyint NOT NULL,
+  `iso3` tinyint NOT NULL,
+  `iso2` tinyint NOT NULL,
+  `phone` tinyint NOT NULL,
+  `adjectivals` tinyint NOT NULL,
+  `demonyms` tinyint NOT NULL,
+  `demonyms_colloquial` tinyint NOT NULL,
+  `coord_lat` tinyint NOT NULL,
+  `coord_lng` tinyint NOT NULL,
+  `coord_accuracy` tinyint NOT NULL,
+  `tag` tinyint NOT NULL,
+  `actions` tinyint NOT NULL,
+  `tags` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `highlights`
+--
+
+DROP TABLE IF EXISTS `highlights`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `highlights` (
+  `highlights_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `highlight` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `priority` smallint(6) DEFAULT '0',
+  `enabled` enum('yes','no') DEFAULT 'yes',
+  PRIMARY KEY (`highlights_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `member_reports`
+--
+
+DROP TABLE IF EXISTS `member_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member_reports` (
+  `member_reports_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `member_schools_number_fk` smallint(5) unsigned NOT NULL,
+  `date` date NOT NULL,
+  `date_days` smallint(5) unsigned DEFAULT '1',
+  `description` text NOT NULL,
+  `students` smallint(5) unsigned DEFAULT NULL,
+  `students_age` varchar(5) DEFAULT NULL,
+  `teachers` smallint(5) unsigned DEFAULT NULL,
+  `parents` smallint(5) unsigned DEFAULT NULL,
+  `contact` varchar(255) DEFAULT NULL,
+  `email_contact` varchar(255) DEFAULT NULL,
+  `attachments` varchar(255) DEFAULT NULL,
+  `datetime_registration` datetime NOT NULL,
+  `datetime_approval` datetime DEFAULT NULL,
+  `feedback` text,
+  PRIMARY KEY (`member_reports_id`),
+  KEY `school` (`member_schools_number_fk`),
+  KEY `member_reports_member_schools_number_fk` (`member_schools_number_fk`),
+  CONSTRAINT `member_reports_member_schools_number_fk` FOREIGN KEY (`member_schools_number_fk`) REFERENCES `member_schools` (`member_schools_number`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6061 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `member_reports_has_actions`
+--
+
+DROP TABLE IF EXISTS `member_reports_has_actions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member_reports_has_actions` (
+  `member_reports_has_actions_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `member_reports_id_fk` smallint(5) unsigned NOT NULL,
+  `actions_number_fk` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`member_reports_id_fk`,`actions_number_fk`),
+  UNIQUE KEY `member_reports_has_actions_id_UNIQUE` (`member_reports_has_actions_id`),
+  KEY `member_reports_has_actions_actions_number_fk` (`actions_number_fk`),
+  KEY `member_reports_has_actions_member_reports_id_fk` (`member_reports_id_fk`),
+  CONSTRAINT `member_reports_has_actions_actions_number_fk` FOREIGN KEY (`actions_number_fk`) REFERENCES `actions` (`actions_number`) ON UPDATE CASCADE,
+  CONSTRAINT `member_reports_has_actions_member_reports_id_fk` FOREIGN KEY (`member_reports_id_fk`) REFERENCES `member_reports` (`member_reports_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4890 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `member_reports_overview`
+--
+
+DROP TABLE IF EXISTS `member_reports_overview`;
+/*!50001 DROP VIEW IF EXISTS `member_reports_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `member_reports_overview` (
+  `member_reports_id` tinyint NOT NULL,
+  `member_schools_number_fk` tinyint NOT NULL,
+  `date` tinyint NOT NULL,
+  `date_days` tinyint NOT NULL,
+  `description` tinyint NOT NULL,
+  `students` tinyint NOT NULL,
+  `students_age` tinyint NOT NULL,
+  `teachers` tinyint NOT NULL,
+  `parents` tinyint NOT NULL,
+  `contact` tinyint NOT NULL,
+  `email_contact` tinyint NOT NULL,
+  `attachments` tinyint NOT NULL,
+  `datetime_registration` tinyint NOT NULL,
+  `datetime_approval` tinyint NOT NULL,
+  `feedback` tinyint NOT NULL,
+  `member_schools_number` tinyint NOT NULL,
+  `school` tinyint NOT NULL,
+  `city` tinyint NOT NULL,
+  `county` tinyint NOT NULL,
+  `country` tinyint NOT NULL,
+  `country_short` tinyint NOT NULL,
+  `country_se` tinyint NOT NULL,
+  `countries_iso` tinyint NOT NULL,
+  `iso3` tinyint NOT NULL,
+  `iso2` tinyint NOT NULL,
+  `phone` tinyint NOT NULL,
+  `adjectivals` tinyint NOT NULL,
+  `demonyms` tinyint NOT NULL,
+  `demonyms_colloquial` tinyint NOT NULL,
+  `coord_lat` tinyint NOT NULL,
+  `coord_lng` tinyint NOT NULL,
+  `coord_accuracy` tinyint NOT NULL,
+  `actions` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `member_schools`
+--
+
+DROP TABLE IF EXISTS `member_schools`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member_schools` (
+  `member_schools_number` smallint(5) unsigned NOT NULL,
+  `school` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `address_zipcode` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `county` varchar(255) DEFAULT NULL,
+  `countries_iso_fk` smallint(6) NOT NULL,
+  `coord_lat` float NOT NULL DEFAULT '0',
+  `coord_lng` float NOT NULL DEFAULT '0',
+  `coord_accuracy` smallint(6) NOT NULL DEFAULT '0',
+  `tel` varchar(255) DEFAULT NULL,
+  `fax` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `website` varchar(255) DEFAULT NULL,
+  `contact_senior` varchar(255) DEFAULT NULL,
+  `email_contact_senior` varchar(255) DEFAULT NULL,
+  `contact_junior` varchar(255) DEFAULT NULL,
+  `email_contact_junior` varchar(255) DEFAULT NULL,
+  `students` smallint(5) unsigned DEFAULT NULL,
+  `students_age` varchar(255) DEFAULT NULL,
+  `students_gender` enum('mf','m','f') DEFAULT NULL,
+  `teachers` smallint(5) unsigned DEFAULT NULL,
+  `datetime_registration` datetime NOT NULL,
+  `datetime_approval` datetime DEFAULT NULL,
+  `datetime_update` datetime DEFAULT NULL,
+  PRIMARY KEY (`member_schools_number`),
+  KEY `countries_iso_fk` (`countries_iso_fk`),
+  CONSTRAINT `member_schools_countries_iso_fk` FOREIGN KEY (`countries_iso_fk`) REFERENCES `countries` (`countries_iso`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `member_schools_certificates`
+--
+
+DROP TABLE IF EXISTS `member_schools_certificates`;
+/*!50001 DROP VIEW IF EXISTS `member_schools_certificates`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `member_schools_certificates` (
+  `member_schools_number` tinyint NOT NULL,
+  `school` tinyint NOT NULL,
+  `address` tinyint NOT NULL,
+  `address_zipcode` tinyint NOT NULL,
+  `city` tinyint NOT NULL,
+  `county` tinyint NOT NULL,
+  `countries_iso_fk` tinyint NOT NULL,
+  `tel` tinyint NOT NULL,
+  `fax` tinyint NOT NULL,
+  `email` tinyint NOT NULL,
+  `website` tinyint NOT NULL,
+  `contact_senior` tinyint NOT NULL,
+  `email_contact_senior` tinyint NOT NULL,
+  `contact_junior` tinyint NOT NULL,
+  `email_contact_junior` tinyint NOT NULL,
+  `students` tinyint NOT NULL,
+  `teachers` tinyint NOT NULL,
+  `datetime_registration` tinyint NOT NULL,
+  `datetime_approval` tinyint NOT NULL,
+  `datetime_update` tinyint NOT NULL,
+  `country` tinyint NOT NULL,
+  `country_short` tinyint NOT NULL,
+  `country_se` tinyint NOT NULL,
+  `countries_iso` tinyint NOT NULL,
+  `iso3` tinyint NOT NULL,
+  `iso2` tinyint NOT NULL,
+  `phone` tinyint NOT NULL,
+  `adjectivals` tinyint NOT NULL,
+  `demonyms` tinyint NOT NULL,
+  `demonyms_colloquial` tinyint NOT NULL,
+  `coord_lat` tinyint NOT NULL,
+  `coord_lng` tinyint NOT NULL,
+  `coord_accuracy` tinyint NOT NULL,
+  `date_report_first` tinyint NOT NULL,
+  `date_report_last` tinyint NOT NULL,
+  `count_reports` tinyint NOT NULL,
+  `count_actions` tinyint NOT NULL,
+  `tags` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `member_schools_cities_overview`
+--
+
+DROP TABLE IF EXISTS `member_schools_cities_overview`;
+/*!50001 DROP VIEW IF EXISTS `member_schools_cities_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `member_schools_cities_overview` (
+  `city` tinyint NOT NULL,
+  `county` tinyint NOT NULL,
+  `country` tinyint NOT NULL,
+  `country_short` tinyint NOT NULL,
+  `country_se` tinyint NOT NULL,
+  `countries_iso` tinyint NOT NULL,
+  `iso3` tinyint NOT NULL,
+  `iso2` tinyint NOT NULL,
+  `phone` tinyint NOT NULL,
+  `adjectivals` tinyint NOT NULL,
+  `demonyms` tinyint NOT NULL,
+  `demonyms_colloquial` tinyint NOT NULL,
+  `coord_lat` tinyint NOT NULL,
+  `coord_lng` tinyint NOT NULL,
+  `coord_accuracy` tinyint NOT NULL,
+  `count_schools` tinyint NOT NULL,
+  `date_report_first` tinyint NOT NULL,
+  `date_report_last` tinyint NOT NULL,
+  `count_reports` tinyint NOT NULL,
+  `count_actions` tinyint NOT NULL,
+  `tags` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `member_schools_countries_overview`
+--
+
+DROP TABLE IF EXISTS `member_schools_countries_overview`;
+/*!50001 DROP VIEW IF EXISTS `member_schools_countries_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `member_schools_countries_overview` (
+  `country` tinyint NOT NULL,
+  `country_short` tinyint NOT NULL,
+  `country_se` tinyint NOT NULL,
+  `countries_iso` tinyint NOT NULL,
+  `iso3` tinyint NOT NULL,
+  `iso2` tinyint NOT NULL,
+  `phone` tinyint NOT NULL,
+  `adjectivals` tinyint NOT NULL,
+  `demonyms` tinyint NOT NULL,
+  `demonyms_colloquial` tinyint NOT NULL,
+  `coord_lat` tinyint NOT NULL,
+  `coord_lng` tinyint NOT NULL,
+  `coord_accuracy` tinyint NOT NULL,
+  `count_schools` tinyint NOT NULL,
+  `date_report_first` tinyint NOT NULL,
+  `date_report_last` tinyint NOT NULL,
+  `count_reports` tinyint NOT NULL,
+  `count_actions` tinyint NOT NULL,
+  `tags` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `member_schools_has_tags`
+--
+
+DROP TABLE IF EXISTS `member_schools_has_tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member_schools_has_tags` (
+  `member_schools_has_tags_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `member_schools_number_fk` smallint(5) unsigned NOT NULL,
+  `tags_id_fk` smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (`tags_id_fk`,`member_schools_number_fk`),
+  UNIQUE KEY `member_schools_has_tags_UNIQUE` (`member_schools_has_tags_id`),
+  KEY `member_schools_has_tags_tags_id_fk` (`tags_id_fk`),
+  KEY `member_schools_has_tags_member_schools_number_fk` (`member_schools_number_fk`),
+  CONSTRAINT `member_schools_has_tags_member_schools_number_fk` FOREIGN KEY (`member_schools_number_fk`) REFERENCES `member_schools` (`member_schools_number`) ON UPDATE CASCADE,
+  CONSTRAINT `member_schools_has_tags_tags_id_fk` FOREIGN KEY (`tags_id_fk`) REFERENCES `tags` (`tags_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `member_schools_overview`
+--
+
+DROP TABLE IF EXISTS `member_schools_overview`;
+/*!50001 DROP VIEW IF EXISTS `member_schools_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `member_schools_overview` (
+  `member_schools_number` tinyint NOT NULL,
+  `school` tinyint NOT NULL,
+  `address` tinyint NOT NULL,
+  `address_zipcode` tinyint NOT NULL,
+  `city` tinyint NOT NULL,
+  `county` tinyint NOT NULL,
+  `countries_iso_fk` tinyint NOT NULL,
+  `tel` tinyint NOT NULL,
+  `fax` tinyint NOT NULL,
+  `email` tinyint NOT NULL,
+  `website` tinyint NOT NULL,
+  `contact_senior` tinyint NOT NULL,
+  `email_contact_senior` tinyint NOT NULL,
+  `contact_junior` tinyint NOT NULL,
+  `email_contact_junior` tinyint NOT NULL,
+  `students` tinyint NOT NULL,
+  `teachers` tinyint NOT NULL,
+  `datetime_registration` tinyint NOT NULL,
+  `datetime_approval` tinyint NOT NULL,
+  `datetime_update` tinyint NOT NULL,
+  `country` tinyint NOT NULL,
+  `country_short` tinyint NOT NULL,
+  `country_se` tinyint NOT NULL,
+  `countries_iso` tinyint NOT NULL,
+  `iso3` tinyint NOT NULL,
+  `iso2` tinyint NOT NULL,
+  `phone` tinyint NOT NULL,
+  `adjectivals` tinyint NOT NULL,
+  `demonyms` tinyint NOT NULL,
+  `demonyms_colloquial` tinyint NOT NULL,
+  `coord_lat` tinyint NOT NULL,
+  `coord_lng` tinyint NOT NULL,
+  `coord_accuracy` tinyint NOT NULL,
+  `date_report_first` tinyint NOT NULL,
+  `date_report_last` tinyint NOT NULL,
+  `count_reports` tinyint NOT NULL,
+  `count_actions` tinyint NOT NULL,
+  `tags` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `reactions`
+--
+
+DROP TABLE IF EXISTS `reactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reactions` (
+  `reactions_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `countries_iso_fk` smallint(6) NOT NULL,
+  `who` varchar(255) DEFAULT NULL,
+  `info` varchar(255) DEFAULT NULL,
+  `reaction` text,
+  `year` smallint(5) unsigned DEFAULT NULL,
+  PRIMARY KEY (`reactions_id`),
+  KEY `reactions_countries_iso_fk` (`countries_iso_fk`),
+  CONSTRAINT `reactions_countries_iso_fk` FOREIGN KEY (`countries_iso_fk`) REFERENCES `countries` (`countries_iso`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `reactions_overview`
+--
+
+DROP TABLE IF EXISTS `reactions_overview`;
+/*!50001 DROP VIEW IF EXISTS `reactions_overview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `reactions_overview` (
+  `reactions_id` tinyint NOT NULL,
+  `countries_iso_fk` tinyint NOT NULL,
+  `who` tinyint NOT NULL,
+  `info` tinyint NOT NULL,
+  `reaction` tinyint NOT NULL,
+  `year` tinyint NOT NULL,
+  `country` tinyint NOT NULL,
+  `country_short` tinyint NOT NULL,
+  `country_se` tinyint NOT NULL,
+  `countries_iso` tinyint NOT NULL,
+  `iso3` tinyint NOT NULL,
+  `iso2` tinyint NOT NULL,
+  `phone` tinyint NOT NULL,
+  `adjectivals` tinyint NOT NULL,
+  `demonyms` tinyint NOT NULL,
+  `demonyms_colloquial` tinyint NOT NULL,
+  `coord_lat` tinyint NOT NULL,
+  `coord_lng` tinyint NOT NULL,
+  `coord_accuracy` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `tags`
+--
+
+DROP TABLE IF EXISTS `tags`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tags` (
+  `tags_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Code (ISO 3166-1 numeric)',
+  `tag` varchar(255) NOT NULL COMMENT 'Tag',
+  `events_id_fk` smallint(5) unsigned DEFAULT NULL,
+  PRIMARY KEY (`tags_id`),
+  UNIQUE KEY `name` (`tag`),
+  KEY `tags_events_id_fk` (`events_id_fk`),
+  CONSTRAINT `tags_events_id_fk` FOREIGN KEY (`events_id_fk`) REFERENCES `events` (`events_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `update_requests`
+--
+
+DROP TABLE IF EXISTS `update_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `update_requests` (
+  `update_requests_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `type` enum('school','report') NOT NULL DEFAULT 'school',
+  `json_data` text NOT NULL,
+  `validation` varchar(255) NOT NULL,
+  `datetime_validation` datetime NOT NULL,
+  `email_validation` varchar(255) DEFAULT NULL,
+  `datetime_commit` datetime DEFAULT NULL,
+  PRIMARY KEY (`update_requests_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `variables`
+--
+
+DROP TABLE IF EXISTS `variables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `variables` (
+  `variables_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `variable` varchar(255) NOT NULL,
+  `value` text NOT NULL,
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`variables_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9833 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Final view structure for view `actions_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `actions_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `actions_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `actions_overview` AS (select `a`.`actions_number` AS `actions_number`,concat(left(`a`.`actions_number`,1),':',right(`a`.`actions_number`,2)) AS `actions_number_nice`,`a`.`action` AS `action`,`a`.`description_theory` AS `description_theory`,`a`.`description_action` AS `description_action`,`a`.`description_stepbystep` AS `description_stepbystep`,`a`.`extra_title` AS `extra_title`,`a`.`extra_info` AS `extra_info`,`a`.`is_old` AS `is_old`,group_concat(distinct `t`.`tag` separator ',') AS `tags` from ((`actions` `a` left join `actions_has_tags` `a2t` on((`a2t`.`actions_number_fk` = `a`.`actions_number`))) left join `tags` `t` on((`a2t`.`tags_id_fk` = `t`.`tags_id`))) group by `a`.`actions_number`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `contacts_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `contacts_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `contacts_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `contacts_overview` AS (select `p`.`contacts_id` AS `contacts_id`,`p`.`contact` AS `contact`,`p`.`position` AS `position`,`p`.`department` AS `department`,`p`.`department_order` AS `department_order`,`p`.`countries_iso_fk` AS `countries_iso_fk`,`p`.`nickname` AS `nickname`,`p`.`email` AS `email`,`c`.`country` AS `country`,`c`.`country_short` AS `country_short`,`c`.`country_se` AS `country_se`,`c`.`countries_iso` AS `countries_iso`,`c`.`iso3` AS `iso3`,`c`.`iso2` AS `iso2`,`c`.`phone` AS `phone`,`c`.`adjectivals` AS `adjectivals`,`c`.`demonyms` AS `demonyms`,`c`.`demonyms_colloquial` AS `demonyms_colloquial`,`c`.`coord_lat` AS `coord_lat`,`c`.`coord_lng` AS `coord_lng`,1 AS `coord_accuracy` from (`contacts` `p` left join `countries_overview` `c` on((`p`.`countries_iso_fk` = `c`.`countries_iso`)))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `countries_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `countries_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `countries_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `countries_overview` AS (select `c`.`country` AS `country`,substring_index(`c`.`country`,',',1) AS `country_short`,`c`.`country_se` AS `country_se`,`c`.`countries_iso` AS `countries_iso`,`c`.`iso3` AS `iso3`,`c`.`iso2` AS `iso2`,`c`.`phone` AS `phone`,`c`.`adjectivals` AS `adjectivals`,`c`.`demonyms` AS `demonyms`,`c`.`demonyms_colloquial` AS `demonyms_colloquial`,`c`.`coord_lat` AS `coord_lat`,`c`.`coord_lng` AS `coord_lng`,1 AS `coord_accuracy` from `countries` `c`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `days_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `days_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `days_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `days_overview` AS (select `d`.`days_id` AS `days_id`,`d`.`type` AS `type`,`d`.`month_day` AS `month_day`,`d`.`month` AS `month`,`d`.`day` AS `day`,`d`.`url` AS `url`,group_concat(distinct `d2a`.`actions_number_fk` separator ',') AS `actions` from (`days` `d` left join `days_has_actions` `d2a` on((`d2a`.`days_id_fk` = `d`.`days_id`))) group by `d`.`days_id`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `delicious_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `delicious_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `delicious_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `delicious_overview` AS (select `d`.`delicious_id` AS `delicious_id`,`d`.`url` AS `url`,`d`.`title` AS `title`,`d`.`description` AS `description`,`d`.`datetime` AS `datetime`,group_concat(distinct `t`.`tag` separator ',') AS `tags` from ((`delicious` `d` left join `delicious_has_tags` `d2t` on((`d2t`.`delicious_id_fk` = `d`.`delicious_id`))) left join `tags` `t` on((`d2t`.`tags_id_fk` = `t`.`tags_id`))) group by `d`.`delicious_id`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `events_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `events_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `events_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `events_overview` AS (select `e`.`events_id` AS `events_id`,`e`.`type` AS `type`,`e`.`date_start` AS `date_start`,year(`e`.`date_start`) AS `year_start`,`e`.`date_end` AS `date_end`,year(`e`.`date_end`) AS `year_end`,`e`.`logo` AS `logo`,`e`.`event` AS `event`,`e`.`event_cont` AS `event_cont`,`e`.`description` AS `description`,`e`.`slug_gallery` AS `slug_gallery`,`e`.`slug_survey` AS `slug_survey`,`e`.`countries_iso_fk` AS `countries_iso_fk`,`e`.`is_sticky` AS `is_sticky`,`c`.`country` AS `country`,`c`.`country_short` AS `country_short`,`c`.`country_se` AS `country_se`,`c`.`countries_iso` AS `countries_iso`,`c`.`iso3` AS `iso3`,`c`.`iso2` AS `iso2`,`c`.`phone` AS `phone`,`c`.`adjectivals` AS `adjectivals`,`c`.`demonyms` AS `demonyms`,`c`.`demonyms_colloquial` AS `demonyms_colloquial`,`c`.`coord_lat` AS `coord_lat`,`c`.`coord_lng` AS `coord_lng`,1 AS `coord_accuracy`,`t`.`tag` AS `tag`,group_concat(distinct `e2a`.`actions_number_fk` separator ',') AS `actions`,group_concat(distinct `t`.`tag` separator ',') AS `tags` from ((((`events` `e` left join `countries_overview` `c` on((`c`.`countries_iso` = `e`.`countries_iso_fk`))) left join `events_has_actions` `e2a` on((`e2a`.`events_id_fk` = `e`.`events_id`))) left join `events_has_tags` `e2t` on((`e2t`.`events_id_fk` = `e`.`events_id`))) left join `tags` `t` on((`e2t`.`tags_id_fk` = `t`.`tags_id`))) group by `e`.`events_id`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `member_reports_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `member_reports_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `member_reports_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `member_reports_overview` AS (select `r`.`member_reports_id` AS `member_reports_id`,`r`.`member_schools_number_fk` AS `member_schools_number_fk`,`r`.`date` AS `date`,`r`.`date_days` AS `date_days`,`r`.`description` AS `description`,`r`.`students` AS `students`,`r`.`students_age` AS `students_age`,`r`.`teachers` AS `teachers`,`r`.`parents` AS `parents`,`r`.`contact` AS `contact`,`r`.`email_contact` AS `email_contact`,`r`.`attachments` AS `attachments`,`r`.`datetime_registration` AS `datetime_registration`,`r`.`datetime_approval` AS `datetime_approval`,`r`.`feedback` AS `feedback`,`s`.`member_schools_number` AS `member_schools_number`,`s`.`school` AS `school`,`s`.`city` AS `city`,`s`.`county` AS `county`,`c`.`country` AS `country`,`c`.`country_short` AS `country_short`,`c`.`country_se` AS `country_se`,`c`.`countries_iso` AS `countries_iso`,`c`.`iso3` AS `iso3`,`c`.`iso2` AS `iso2`,`c`.`phone` AS `phone`,`c`.`adjectivals` AS `adjectivals`,`c`.`demonyms` AS `demonyms`,`c`.`demonyms_colloquial` AS `demonyms_colloquial`,if((`s`.`coord_accuracy` = 0),`c`.`coord_lat`,`s`.`coord_lat`) AS `coord_lat`,if((`s`.`coord_accuracy` = 0),`c`.`coord_lng`,`s`.`coord_lng`) AS `coord_lng`,if((`s`.`coord_accuracy` = 0),1,`s`.`coord_accuracy`) AS `coord_accuracy`,group_concat(distinct `r2a`.`actions_number_fk` separator ',') AS `actions` from (((`member_reports` `r` join `member_schools` `s` on((`r`.`member_schools_number_fk` = `s`.`member_schools_number`))) join `member_reports_has_actions` `r2a` on((`r2a`.`member_reports_id_fk` = `r`.`member_reports_id`))) join `countries_overview` `c` on((`c`.`countries_iso` = `s`.`countries_iso_fk`))) group by `r`.`member_reports_id`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `member_schools_certificates`
+--
+
+/*!50001 DROP TABLE IF EXISTS `member_schools_certificates`*/;
+/*!50001 DROP VIEW IF EXISTS `member_schools_certificates`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_unicode_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink_basic`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `member_schools_certificates` AS (select `s`.`member_schools_number` AS `member_schools_number`,`s`.`school` AS `school`,`s`.`address` AS `address`,`s`.`address_zipcode` AS `address_zipcode`,`s`.`city` AS `city`,`s`.`county` AS `county`,`s`.`countries_iso_fk` AS `countries_iso_fk`,`s`.`tel` AS `tel`,`s`.`fax` AS `fax`,`s`.`email` AS `email`,`s`.`website` AS `website`,`s`.`contact_senior` AS `contact_senior`,`s`.`email_contact_senior` AS `email_contact_senior`,`s`.`contact_junior` AS `contact_junior`,`s`.`email_contact_junior` AS `email_contact_junior`,`s`.`students` AS `students`,`s`.`teachers` AS `teachers`,`s`.`datetime_registration` AS `datetime_registration`,`s`.`datetime_approval` AS `datetime_approval`,`s`.`datetime_update` AS `datetime_update`,`c`.`country` AS `country`,`c`.`country_short` AS `country_short`,`c`.`country_se` AS `country_se`,`c`.`countries_iso` AS `countries_iso`,`c`.`iso3` AS `iso3`,`c`.`iso2` AS `iso2`,`c`.`phone` AS `phone`,`c`.`adjectivals` AS `adjectivals`,`c`.`demonyms` AS `demonyms`,`c`.`demonyms_colloquial` AS `demonyms_colloquial`,if((`s`.`coord_accuracy` = 0),`c`.`coord_lat`,`s`.`coord_lat`) AS `coord_lat`,if((`s`.`coord_accuracy` = 0),`c`.`coord_lng`,`s`.`coord_lng`) AS `coord_lng`,if((`s`.`coord_accuracy` = 0),1,`s`.`coord_accuracy`) AS `coord_accuracy`,min(`r`.`date`) AS `date_report_first`,max(`r`.`date`) AS `date_report_last`,count(`r`.`member_reports_id`) AS `count_reports`,count(`r2a`.`member_reports_has_actions_id`) AS `count_actions`,group_concat(distinct `t`.`tag` separator ',') AS `tags` from (((((`member_schools` `s` join `member_reports` `r` on((`r`.`member_schools_number_fk` = `s`.`member_schools_number`))) join `member_reports_has_actions` `r2a` on((`r2a`.`member_reports_id_fk` = `r`.`member_reports_id`))) join `countries_overview` `c` on((`c`.`countries_iso` = `s`.`countries_iso_fk`))) left join `member_schools_has_tags` `s2t` on((`s2t`.`member_schools_number_fk` = `s`.`member_schools_number`))) left join `tags` `t` on((`s2t`.`tags_id_fk` = `t`.`tags_id`))) group by `s`.`member_schools_number`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `member_schools_cities_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `member_schools_cities_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `member_schools_cities_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_unicode_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink_basic`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `member_schools_cities_overview` AS (select `s`.`city` AS `city`,`s`.`county` AS `county`,`c`.`country` AS `country`,`c`.`country_short` AS `country_short`,`c`.`country_se` AS `country_se`,`c`.`countries_iso` AS `countries_iso`,`c`.`iso3` AS `iso3`,`c`.`iso2` AS `iso2`,`c`.`phone` AS `phone`,`c`.`adjectivals` AS `adjectivals`,`c`.`demonyms` AS `demonyms`,`c`.`demonyms_colloquial` AS `demonyms_colloquial`,`c`.`coord_lat` AS `coord_lat`,`c`.`coord_lng` AS `coord_lng`,1 AS `coord_accuracy`,count(distinct `s`.`member_schools_number`) AS `count_schools`,min(`r`.`date`) AS `date_report_first`,max(`r`.`date`) AS `date_report_last`,count(`r`.`member_reports_id`) AS `count_reports`,count(distinct `r2a`.`actions_number_fk`) AS `count_actions`,group_concat(distinct `t`.`tag` separator ',') AS `tags` from (((((`member_schools` `s` join `member_reports` `r` on((`r`.`member_schools_number_fk` = `s`.`member_schools_number`))) join `member_reports_has_actions` `r2a` on((`r2a`.`member_reports_id_fk` = `r`.`member_reports_id`))) join `countries_overview` `c` on((`c`.`countries_iso` = `s`.`countries_iso_fk`))) left join `member_schools_has_tags` `s2t` on((`s2t`.`member_schools_number_fk` = `s`.`member_schools_number`))) left join `tags` `t` on((`s2t`.`tags_id_fk` = `t`.`tags_id`))) group by `s`.`city`,`s`.`county`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `member_schools_countries_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `member_schools_countries_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `member_schools_countries_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_unicode_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink_basic`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `member_schools_countries_overview` AS (select `c`.`country` AS `country`,`c`.`country_short` AS `country_short`,`c`.`country_se` AS `country_se`,`c`.`countries_iso` AS `countries_iso`,`c`.`iso3` AS `iso3`,`c`.`iso2` AS `iso2`,`c`.`phone` AS `phone`,`c`.`adjectivals` AS `adjectivals`,`c`.`demonyms` AS `demonyms`,`c`.`demonyms_colloquial` AS `demonyms_colloquial`,`c`.`coord_lat` AS `coord_lat`,`c`.`coord_lng` AS `coord_lng`,1 AS `coord_accuracy`,count(distinct `s`.`member_schools_number`) AS `count_schools`,min(`r`.`date`) AS `date_report_first`,max(`r`.`date`) AS `date_report_last`,count(`r`.`member_reports_id`) AS `count_reports`,count(distinct `r2a`.`actions_number_fk`) AS `count_actions`,group_concat(distinct `t`.`tag` separator ',') AS `tags` from (((((`member_schools` `s` join `member_reports` `r` on((`r`.`member_schools_number_fk` = `s`.`member_schools_number`))) join `member_reports_has_actions` `r2a` on((`r2a`.`member_reports_id_fk` = `r`.`member_reports_id`))) join `countries_overview` `c` on((`c`.`countries_iso` = `s`.`countries_iso_fk`))) left join `member_schools_has_tags` `s2t` on((`s2t`.`member_schools_number_fk` = `s`.`member_schools_number`))) left join `tags` `t` on((`s2t`.`tags_id_fk` = `t`.`tags_id`))) group by `s`.`countries_iso_fk`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `member_schools_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `member_schools_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `member_schools_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `member_schools_overview` AS (select `s`.`member_schools_number` AS `member_schools_number`,`s`.`school` AS `school`,`s`.`address` AS `address`,`s`.`address_zipcode` AS `address_zipcode`,`s`.`city` AS `city`,`s`.`county` AS `county`,`s`.`countries_iso_fk` AS `countries_iso_fk`,`s`.`tel` AS `tel`,`s`.`fax` AS `fax`,`s`.`email` AS `email`,`s`.`website` AS `website`,`s`.`contact_senior` AS `contact_senior`,`s`.`email_contact_senior` AS `email_contact_senior`,`s`.`contact_junior` AS `contact_junior`,`s`.`email_contact_junior` AS `email_contact_junior`,`s`.`students` AS `students`,`s`.`teachers` AS `teachers`,`s`.`datetime_registration` AS `datetime_registration`,`s`.`datetime_approval` AS `datetime_approval`,`s`.`datetime_update` AS `datetime_update`,`c`.`country` AS `country`,`c`.`country_short` AS `country_short`,`c`.`country_se` AS `country_se`,`c`.`countries_iso` AS `countries_iso`,`c`.`iso3` AS `iso3`,`c`.`iso2` AS `iso2`,`c`.`phone` AS `phone`,`c`.`adjectivals` AS `adjectivals`,`c`.`demonyms` AS `demonyms`,`c`.`demonyms_colloquial` AS `demonyms_colloquial`,if((`s`.`coord_accuracy` = 0),`c`.`coord_lat`,`s`.`coord_lat`) AS `coord_lat`,if((`s`.`coord_accuracy` = 0),`c`.`coord_lng`,`s`.`coord_lng`) AS `coord_lng`,if((`s`.`coord_accuracy` = 0),1,`s`.`coord_accuracy`) AS `coord_accuracy`,min(`r`.`date`) AS `date_report_first`,max(`r`.`date`) AS `date_report_last`,count(`r`.`member_reports_id`) AS `count_reports`,count(distinct `r2a`.`actions_number_fk`) AS `count_actions`,group_concat(distinct `t`.`tag` separator ',') AS `tags` from (((((`member_schools` `s` join `member_reports` `r` on((`r`.`member_schools_number_fk` = `s`.`member_schools_number`))) join `member_reports_has_actions` `r2a` on((`r2a`.`member_reports_id_fk` = `r`.`member_reports_id`))) join `countries_overview` `c` on((`c`.`countries_iso` = `s`.`countries_iso_fk`))) left join `member_schools_has_tags` `s2t` on((`s2t`.`member_schools_number_fk` = `s`.`member_schools_number`))) left join `tags` `t` on((`s2t`.`tags_id_fk` = `t`.`tags_id`))) group by `s`.`member_schools_number`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `reactions_overview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `reactions_overview`*/;
+/*!50001 DROP VIEW IF EXISTS `reactions_overview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`lifelink`@`69.163.128.0/255.255.128.0` SQL SECURITY DEFINER */
+/*!50001 VIEW `reactions_overview` AS (select `r`.`reactions_id` AS `reactions_id`,`r`.`countries_iso_fk` AS `countries_iso_fk`,`r`.`who` AS `who`,`r`.`info` AS `info`,`r`.`reaction` AS `reaction`,`r`.`year` AS `year`,`c`.`country` AS `country`,`c`.`country_short` AS `country_short`,`c`.`country_se` AS `country_se`,`c`.`countries_iso` AS `countries_iso`,`c`.`iso3` AS `iso3`,`c`.`iso2` AS `iso2`,`c`.`phone` AS `phone`,`c`.`adjectivals` AS `adjectivals`,`c`.`demonyms` AS `demonyms`,`c`.`demonyms_colloquial` AS `demonyms_colloquial`,`c`.`coord_lat` AS `coord_lat`,`c`.`coord_lng` AS `coord_lng`,1 AS `coord_accuracy` from (`reactions` `r` join `countries_overview` `c` on((`r`.`countries_iso_fk` = `c`.`countries_iso`)))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-03-02 11:38:13
