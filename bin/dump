@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+. ${DIR}/.config
+
+${DIR}/dump2sql >master/.${DB}.mysql.sql
+${DIR}/dump2sql.split master
